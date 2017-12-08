@@ -1,0 +1,6 @@
+.redAxis path, .redAxis line {
+	stroke: red;
+}
+.redAxis text {
+	fill: red;
+}
