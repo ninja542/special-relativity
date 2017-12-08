@@ -14,3 +14,20 @@ var yAxis = d3.axisLeft(yScale);
 
 svg.append("g").call(xAxis).attr("transform", "translate(" + 0 + ", " + yScale(0) + ")");
 svg.append("g").call(yAxis).attr("transform", "translate(" + xScale(0) + ", " + 0 + ")");
+
+// transformed graph
+// speed is in units of c
+var speed = 0.5;
+// angle of the graph itself
+var angle = Math.atan(speed)*180/Math.PI;
+svg.append("g").call(xAxis).attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+angle+","+(xScale(0))+","+ "0"+")")
+	.attr("class", "redAxis");
+svg.append("g").call(yAxis).attr("transform", "translate("+xScale(0)+", "+ 0 + ") rotate ("+angle+", 0,"+yScale(0)+")")
+	.attr("class", "redAxis");
+
+var specialApp = new Vue({
+	el: "#everything",
+	mounted: function(){
+		console.log("hi");
+	}
+});
