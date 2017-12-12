@@ -4,3 +4,7 @@
 .redAxis text {
 	fill: red;
 }
+#everything {
+	display: flex;
+	justify-content: center;
+}
