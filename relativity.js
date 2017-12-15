@@ -13,6 +13,14 @@ var xScale = d3.scaleLinear().domain([-100, 100]).range([0, width]);
 var yScale = d3.scaleLinear().domain([100, -100]).range([0, height]);
 var xAxis = d3.axisBottom(xScale);
 var yAxis = d3.axisLeft(yScale);
+// calls the number of ticks and sets the ticks size to make grid
+svg.append("g").call(d3.axisBottom(xScale).ticks(40).tickSize(-height).tickFormat(""))
+// translate gridlines to the bottom and add the class to make it look better
+	.attr("transform", "translate(" + 0 + ", " + height + ")")
+	.attr("class",  "grid");
+// repeat for y axis
+svg.append("g").call(d3.axisLeft(yScale).ticks(40).tickSize(-width).tickFormat(""))
+	.attr("class", "grid");
 svg.append("g").call(xAxis).attr("transform", "translate(" + 0 + ", " + yScale(0) + ")");
 svg.append("g").call(yAxis).attr("transform", "translate(" + xScale(0) + ", " + 0 + ")");
 
@@ -37,11 +45,15 @@ svg.append("path").attr("d", line([
 var speed = 0.6;
 // for the lorentz transformation
 var gamma = 1/(Math.sqrt(1-Math.pow(speed, 2))/1);
+var transformXScale = d3.scaleLinear().domain([-100/gamma, 100/gamma]).range([0, width]);
+var transformXAxis = d3.axisBottom(transformXScale);
+var transformYScale = d3.scaleLinear().domain([100/gamma, -100/gamma]).range([0, height]);
+var transformYAxis = d3.axisLeft(transformYScale);
 // angle of the graph itself
 var angle = Math.atan(speed)*180/Math.PI;
-svg.append("g").call(xAxis).attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(-angle)+","+(xScale(0))+","+ "0"+")")
+svg.append("g").call(transformXAxis).attr("transform", "translate(" + 0 + ", " + transformYScale(0) + ") rotate ("+(-angle)+","+(transformXScale(0))+","+ "0"+")")
 	.attr("class", "redAxis");
-svg.append("g").call(yAxis).attr("transform", "translate("+xScale(0)+", "+ 0 + ") rotate ("+angle+", 0,"+yScale(0)+")")
+svg.append("g").call(transformYAxis).attr("transform", "translate(" + transformXScale(0) + ", " + 0 + ") rotate ("+angle+", 0,"+transformYScale(0)+")")
 	.attr("class", "redAxis");
 
 // vue app
