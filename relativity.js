@@ -115,7 +115,13 @@ anime({
 		delay: 1000,
 		easing: "linear",
 	},
-	scale: {
-	    value: 0.5,
-  },
+});
+anime({
+	targets: "#lightspeed #mountain",
+	translateX: {
+		value: -1100,
+		duration: 10000,
+		delay: 1000,
+		easing: "linear",
+	},
 });

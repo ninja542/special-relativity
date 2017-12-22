@@ -12,7 +12,7 @@
 .cls-3,.cls-4{fill:none;stroke:#000;stroke-miterlimit:10;}
 .cls-4{stroke-linecap:round;}
 
-.mou-1{fill:none;}
+.mou-1{fill:#fff;}
 .mou-1,.mou-2,.mou-3{stroke:#000;stroke-miterlimit:10;}
 .mou-2{fill:#fff;}
 .mou-3{fill:#666;}
@@ -37,4 +37,12 @@
 }
 #controls #slider {
 	width: 400px;
+}
+#lightspeed #lighttrain{
+	position: relative;
+	top: 140px;
+}
+#lightspeed #mountain {
+	position: relative;
+	top: -60px;
 }
