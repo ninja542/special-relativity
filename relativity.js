@@ -100,12 +100,14 @@ var specialApp = new Vue({
 	},
 	watch: {
 		speed: function(){
+			// TODO: actually update the axis
 			this.updateAxis();
 		}
 	}
 });
 
 // animation testing sorta
+// TODO: name the animations
 anime({
 	targets: "#observer #observetrain",
 	translateX: {
