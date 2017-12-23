@@ -106,7 +106,6 @@ var specialApp = new Vue({
 });
 
 // animation testing sorta
-d3.select("#observetrain").style("position", "relative").style("left", "-360px");
 anime({
 	targets: "#observer #observetrain",
 	translateX: {
@@ -124,4 +123,12 @@ anime({
 		delay: 1000,
 		easing: "linear",
 	},
+});
+anime({
+	targets: "#lightspeed #doorA",
+	translateY: {
+		value: 72,
+		duration: 1000,
+		easing: "linear",
+	}
 });

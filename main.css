@@ -38,11 +38,12 @@
 #controls #slider {
 	width: 400px;
 }
-#lightspeed #lighttrain{
+#lightspeed #lighttrain, #observer #observetrain{
 	position: relative;
-	top: 140px;
+	top: 145px;
 }
-#lightspeed #mountain {
+#lightspeed #mountain,  #observer #mountain {
 	position: relative;
-	top: -60px;
+	top: -55px;
+	left: 250px;
 }
