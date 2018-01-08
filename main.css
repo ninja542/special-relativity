@@ -28,10 +28,10 @@
   stroke: lightgrey;
   stroke-opacity: 0.7;
 }
-.grid path, .specialgrid path {
+.grid path, .gridx1 path, .gridx2 path, .gridy1 path, .gridy2 path {
   stroke-width: 0;
 }
-.specialgrid line {
+.gridx1 line, .gridx2 line, .gridy1 line, .gridy2 line {
 	stroke: lightsalmon;
 	stroke-opacity: 0.7;
 }
@@ -46,4 +46,7 @@
 	position: relative;
 	top: -55px;
 	left: 250px;
+}
+#graph {
+	margin-top: -20px;
 }
