@@ -24,7 +24,7 @@ svgSelection.append("g").call(d3.axisBottom(xScale).ticks(20).tickSize(-height).
 svgSelection.append("g").call(d3.axisLeft(yScale).ticks(20).tickSize(-width).tickFormat(""))
 	.attr("class", "grid");
 	// x and y axes
-svgSelection.append("g").attr("class", "x axis").attr("transform", "translate(" + 0 + ", " + yScale(0) + ")").call(xAxis.tickFormat(function(d){return d+"c";}));
+svgSelection.append("g").attr("class", "x axis").attr("transform", "translate(" + 0 + ", " + yScale(0) + ")").call(xAxis);
 svgSelection.append("g").call(yAxis).attr("transform", "translate(" + xScale(0) + ", " + 0 + ")");
 
 // line function
@@ -60,10 +60,10 @@ svgSelection.append("g")
 	.attr("id", "specialX")
 	.attr("transform", "translate(" + 0 + ", " + temptransformYScale(0) + ") rotate ("+(-tempangle)+","+(temptransformXScale(0))+","+ "0"+")")
 	.attr("class", "redAxis")
-	.call(temptransformXAxis.tickFormat(function(d){return d+"c";}));
+	.call(temptransformXAxis);
 svgSelection.append("g")
 	.attr("id", "specialY")
-	.call(temptransformYAxis.tickFormat(function(d){return d+"c";}))
+	.call(temptransformYAxis)
 	.attr("transform", "translate(" + temptransformXScale(0) + ", " + 0 + ") rotate ("+tempangle+", 0,"+temptransformYScale(0)+")")
 	.attr("class", "redAxis");
 
@@ -91,7 +91,7 @@ var specialApp = new Vue({
 	},
 	methods: {
 		updateAxis: function(){
-			d3.select("#specialX").call(d3.axisBottom(this.transformXScale()).tickFormat(function(d){return d+"c";})).attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(-this.angle)+",0,"+ "0"+")");
+			d3.select("#specialX").call(d3.axisBottom(this.transformXScale())).attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(-this.angle)+",0,"+ "0"+")");
 			d3.select("#specialY").call(d3.axisLeft(this.transformYScale())).attr("transform", "translate(" + xScale(0) + ", " + 0 + ") rotate ("+this.angle+", 0,"+yScale(0)+")");
 			d3.select(".gridx1").call(d3.axisBottom(this.transformXScale()).ticks(20).tickSize(-height).tickFormat(""))
 				.attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(-this.angle)+","+(xScale(0))+","+ 0 +")");
@@ -137,6 +137,10 @@ anime({
 		delay: 1000,
 		easing: "linear",
 	},
+	scaleX: {
+		value: 1/tempgamma,
+		duration: 0,
+	}
 });
 anime({
 	targets: "#lightspeed #mountain",
@@ -145,6 +149,10 @@ anime({
 		duration: 10000,
 		delay: 1000,
 		easing: "linear",
+	},
+	scaleX: {
+		value: 1/tempgamma,
+		duration: 0,
 	},
 });
 anime({

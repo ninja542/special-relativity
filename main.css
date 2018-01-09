@@ -46,7 +46,19 @@
 	position: relative;
 	top: -55px;
 	left: 250px;
+	transform-origin: left center;
 }
 #graph {
-	margin-top: -20px;
+	margin-top: -120px;
+}
+.x-label {
+	position: relative;
+	top: 700px;
+	text-align: center;
+}
+.y-label {
+	position: relative;
+	top: 100px;
+	right: 320px;
+	transform: rotate(-90deg);
 }
