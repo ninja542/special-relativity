@@ -1,5 +1,5 @@
 // PERSONAL NOTES
-// 1 pixel = 1000 meters
+// 1 pixel = 400000 meters
 
 // set up graph
 var margin = { top: 30, right: 30, bottom: 30, left: 30 },
@@ -10,7 +10,7 @@ var svgSelection = d3.select('#graph').append('svg')
 		.attr('width', width + margin.left + margin.right)
 		.attr('height', height + margin.top + margin.bottom)
 	.append('g')
-		.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+		.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').attr("id", "transform");
 var xScale = d3.scaleLinear().domain([0, 1]).range([0, width]);
 var yScale = d3.scaleLinear().domain([1, 0]).range([0, height]);
 var xAxis = d3.axisBottom(xScale);
@@ -43,16 +43,16 @@ var temptransformYAxis = d3.axisLeft(temptransformYScale);
 var tempangle = Math.atan(tempspeed)*180/Math.PI;
 // gridlines
 svgSelection.append("g").call(d3.axisBottom(temptransformXScale).ticks(20).tickSize(-height).tickFormat(""))
-	.attr("transform", "translate(" + 0 + ", " + temptransformYScale(0) + ") rotate ("+(-tempangle)+","+(temptransformXScale(0))+","+ "0"+")")
+	.attr("transform", "translate(" + 0 + ", " + temptransformYScale(0) + ") rotate ("+(tempangle)+","+(temptransformXScale(0))+","+ "0"+")")
 	.attr("class", "gridx1");
 svgSelection.append("g").call(d3.axisBottom(temptransformXScale).ticks(20).tickSize(height).tickFormat(""))
-	.attr("transform", "translate(" + 0 + ", " + temptransformYScale(0) + ") rotate ("+(-tempangle)+","+(temptransformXScale(0))+","+ "0"+")")
+	.attr("transform", "translate(" + 0 + ", " + temptransformYScale(0) + ") rotate ("+(tempangle)+","+(temptransformXScale(0))+","+ "0"+")")
 	.attr("class", "gridx2");
 svgSelection.append("g").call(d3.axisLeft(temptransformYScale).ticks(20).tickSize(-width).tickFormat(""))
-	.attr("transform", "translate(" + temptransformXScale(0) + ", " + 0 + ") rotate ("+tempangle+", 0,"+temptransformYScale(0)+")")
+	.attr("transform", "translate(" + temptransformXScale(0) + ", " + 0 + ") rotate ("+(-tempangle)+", 0,"+temptransformYScale(0)+")")
 	.attr("class", "gridy1");
 svgSelection.append("g").call(d3.axisLeft(temptransformYScale).ticks(20).tickSize(width).tickFormat(""))
-	.attr("transform", "translate(" + temptransformXScale(0) + ", " + 0 + ") rotate ("+tempangle+", 0,"+temptransformYScale(0)+")")
+	.attr("transform", "translate(" + temptransformXScale(0) + ", " + 0 + ") rotate ("+(-tempangle)+", 0,"+temptransformYScale(0)+")")
 	.attr("class", "gridy2");
 
 // axes
@@ -67,17 +67,7 @@ svgSelection.append("g")
 	.attr("transform", "translate(" + temptransformXScale(0) + ", " + 0 + ") rotate ("+tempangle+", 0,"+temptransformYScale(0)+")")
 	.attr("class", "redAxis");
 
-// points for the minkowski diagram
-var pointData = [
-	{x: 0.4, y: 0.2}
-];
-svgSelection.selectAll("circle").data(pointData).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
-var rectangleData = [
-	{x: 0, y: 20},
-];
-
-svgSelection.append("circle").attr("r", 5).attr("fill", "green").attr("class", "change");
-
+const trainlength = 0.15;
 // constant light speed graph
 svgSelection.append("path").attr("d", line([
 		{x: 0, y: height},
@@ -88,19 +78,29 @@ var specialApp = new Vue({
 	el: "#wrapper",
 	data: {
 		speed: 0.4,
+		door: [
+			{x: 0.4, y: 0.2},
+			{x: 0.1, y: 0.3}
+		]
 	},
 	methods: {
-		updateAxis: function(){
+		update: function(){
 			d3.select("#specialX").call(d3.axisBottom(this.transformXScale())).attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(-this.angle)+",0,"+ "0"+")");
 			d3.select("#specialY").call(d3.axisLeft(this.transformYScale())).attr("transform", "translate(" + xScale(0) + ", " + 0 + ") rotate ("+this.angle+", 0,"+yScale(0)+")");
 			d3.select(".gridx1").call(d3.axisBottom(this.transformXScale()).ticks(20).tickSize(-height).tickFormat(""))
-				.attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(-this.angle)+","+(xScale(0))+","+ 0 +")");
+				.attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(this.angle)+","+(xScale(0))+","+ 0 +")");
 			d3.select(".gridx2").call(d3.axisBottom(this.transformXScale()).ticks(20).tickSize(height).tickFormat(""))
-				.attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(-this.angle)+","+(xScale(0))+","+ "0"+")");
+				.attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(this.angle)+","+(xScale(0))+","+ "0"+")");
 			d3.select(".gridy1").call(d3.axisLeft(this.transformYScale()).ticks(20).tickSize(-width).tickFormat(""))
-				.attr("transform", "translate(" + xScale(0) + ", " + 0 + ") rotate ("+this.angle+", 0,"+yScale(0)+")");
+				.attr("transform", "translate(" + xScale(0) + ", " + 0 + ") rotate ("+(-this.angle)+", 0,"+yScale(0)+")");
 			d3.select(".gridy2").call(d3.axisLeft(this.transformYScale()).ticks(20).tickSize(width).tickFormat(""))
-				.attr("transform", "translate(" + xScale(0) + ", " + 0 + ") rotate ("+this.angle+", 0,"+yScale(0)+")");
+				.attr("transform", "translate(" + xScale(0) + ", " + 0 + ") rotate ("+(-this.angle)+", 0,"+yScale(0)+")");
+			d3.select(".train").attr("d", line([
+				{x: xScale(0), y: yScale(0)},
+				{x: xScale(0), y: yScale(trainlength)},
+				{x: xScale(1), y: yScale(this.speed+trainlength)},
+				{x: xScale(1), y: yScale(this.speed)}
+			]));
 		},
 		transformXScale: function(){
 			return d3.scaleLinear().domain([0, 1/this.gamma]).range([0, width]);
@@ -118,12 +118,18 @@ var specialApp = new Vue({
 		},
 	},
 	mounted: function(){
-
+		d3.select("#transform").append("path").attr("d", line([
+				{x: xScale(0), y: yScale(0)},
+				{x: xScale(0), y: yScale(trainlength)},
+				{x: xScale(1), y: yScale(this.speed+trainlength)},
+				{x: xScale(1), y: yScale(this.speed)}
+			])).attr("fill", "teal").attr("opacity", "0.3").attr("class", "train");
+		// points for the minkowski diagram
+		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
 	},
 	watch: {
 		speed: function(){
-			// TODO: actually update the axis
-			this.updateAxis();
+			this.update();
 		}
 	}
 });

@@ -7,13 +7,16 @@
 		<div id="wrapper">
 			<div id="controls">
 				<input id="slider" type="range" min="0" max="1" step="0.01" value="0.1" v-model.number="speed">
-				<div>{{speed}}</div>
+				<div>{{speed}} c</div>
+				<button>Play Animation</button>
+				<button>Stop</button>
+				<input type="range">Animation Speed</div>
 			</div>
 			<div id="everything">
 				<div>
 					<div id="lightspeed">
 						<div id="lighttrain">
-							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="250" xmlns="http://www.w3.org/2000/svg">
+							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="175" xmlns="http://www.w3.org/2000/svg">
 								<g>
 									<path class="cls-1" d="M328.22,53.29A6.64,6.64,0,0,1,326,65.36a9.5,9.5,0,0,0-19,.14h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0H83a9.5,9.5,0,0,0-19,0H56a9.5,9.5,0,0,0-19,0H29a9.5,9.5,0,0,0-19,0H9.25A8.76,8.76,0,0,1,.66,58.4L22,45.5H316l.07-.11Z"/>
 									<path class="cls-1" d="M326,65.36a6.87,6.87,0,0,1-1.38.14H307a9.5,9.5,0,0,1,19-.14Z"/>
@@ -51,7 +54,7 @@
 							</svg>
 						</div>
 						<div id="mountain">
-							<svg viewbox="0 0 515 348" height="202px" width="200px" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+							<svg viewbox="0 0 515 348" height="202px" width="150px" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
 								<g>
 									<path class="mou-1" d="M352,100.81l7.76-13.58a5.38,5.38,0,0,1,9.39.08l13.1,23.82a5.38,5.38,0,0,0,9.19.39l10.76-16.15a5.38,5.38,0,0,1,6.26-2.09l10.39,3.64a5.38,5.38,0,0,0,7-3.87l3.27-14.15L398.89,8.2a12.69,12.69,0,0,0-22.86-1l-44.38,83L343.52,102A5.38,5.38,0,0,0,352,100.81Z"/>
 									<path class="mou-2" d="M117.23,137.16l11.39-11.39a6.08,6.08,0,0,1,8.13-.42l7.49,6.08a6.08,6.08,0,0,0,8.13-.42l9-9a6.08,6.08,0,0,1,7.06-1.12l19.49,9.92L146.71,72.7a12.69,12.69,0,0,0-21.22.79L98.23,118.73l9.37,17.06A6.08,6.08,0,0,0,117.23,137.16Z"/>
@@ -64,7 +67,7 @@
 					</div>
 					<div id="observer">
 						<div id="observetrain">
-							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="250" xmlns="http://www.w3.org/2000/svg">
+							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="175" xmlns="http://www.w3.org/2000/svg">
 								<path class="cls-1" d="M328.22,53.29A6.64,6.64,0,0,1,326,65.36a9.5,9.5,0,0,0-19,.14h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0H83a9.5,9.5,0,0,0-19,0H56a9.5,9.5,0,0,0-19,0H29a9.5,9.5,0,0,0-19,0H9.25A8.76,8.76,0,0,1,.66,58.4L22,45.5H316l.07-.11Z"/>
 								<path class="cls-1" d="M326,65.36a6.87,6.87,0,0,1-1.38.14H307a9.5,9.5,0,0,1,19-.14Z"/>
 								<path d="M324.6,65.5a6.87,6.87,0,0,0,1.38-.14c0,.21,0,.43,0,.64a9.5,9.5,0,0,1-19,0c0-.17,0-.33,0-.5Z"/>
@@ -100,7 +103,7 @@
 							</svg>
 						</div>
 						<div id="mountain">
-							<svg viewbox="0 0 515 348" height="202" width="200px" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+							<svg viewbox="0 0 515 348" height="202" width="150px" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
 								<g>
 									<path class="mou-1" d="M352,100.81l7.76-13.58a5.38,5.38,0,0,1,9.39.08l13.1,23.82a5.38,5.38,0,0,0,9.19.39l10.76-16.15a5.38,5.38,0,0,1,6.26-2.09l10.39,3.64a5.38,5.38,0,0,0,7-3.87l3.27-14.15L398.89,8.2a12.69,12.69,0,0,0-22.86-1l-44.38,83L343.52,102A5.38,5.38,0,0,0,352,100.81Z"/>
 									<path class="mou-2" d="M117.23,137.16l11.39-11.39a6.08,6.08,0,0,1,8.13-.42l7.49,6.08a6.08,6.08,0,0,0,8.13-.42l9-9a6.08,6.08,0,0,1,7.06-1.12l19.49,9.92L146.71,72.7a12.69,12.69,0,0,0-21.22.79L98.23,118.73l9.37,17.06A6.08,6.08,0,0,0,117.23,137.16Z"/>
