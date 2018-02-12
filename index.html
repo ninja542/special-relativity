@@ -10,7 +10,15 @@
 				<div>{{speed}} c</div>
 				<button>Play Animation</button>
 				<button>Stop</button>
-				<input type="range">Animation Speed</div>
+				<input type="range" name="speed" v-model.number="animationspeed" min="0.01" max="1" step="0.01">Animation Speed
+				<input type="radio" name="speed" v-model.number="animationspeed" value="1" id="normal">
+					<label for="normal">1x</label>
+				<input type="radio" name="speed" v-model.number="animationspeed" value="0.5" id="half">
+					<label for="half">0.5x</label>
+				<input type="radio" name="speed" v-model.number="animationspeed" value="0.25" id="quarter">
+					<label for="quarter">0.25x</label>
+				<input type="radio" name="speed" v-model.number="animationspeed" value="0.01" id="slow">
+					<label for="slow">0.01x</label>
 			</div>
 			<div id="everything">
 				<div>

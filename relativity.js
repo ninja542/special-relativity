@@ -80,10 +80,7 @@ var specialApp = new Vue({
 	el: "#wrapper",
 	data: {
 		speed: 0.4,
-		door: [
-			{x: 0.4, y: 0.2},
-			{x: 0.1, y: 0.3}
-		]
+		animationspeed: 1,
 	},
 	methods: {
 		update: function(){
@@ -103,6 +100,10 @@ var specialApp = new Vue({
 				{x: xScale(1), y: yScale(this.speed+trainlength)},
 				{x: xScale(1), y: yScale(this.speed)}
 			]));
+			var data =  d3.select("#transform").selectAll("circle").data(this.door);
+			data.attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
+			data.enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
+			data.exit().remove();
 		},
 		transformXScale: function(){
 			return d3.scaleLinear().domain([0, 1/this.gamma]).range([0, width]);
@@ -117,6 +118,10 @@ var specialApp = new Vue({
 		},
 		angle: function(){
 			return Math.atan(this.speed)*180/Math.PI;
+		},
+		door: function(){
+			return [{x: (distance + mountainlength)/this.speed, y: trainlength+distance+mountainlength},
+			{x: (trainlength+distance)/this.speed, y: trainlength+distance}];
 		},
 	},
 	mounted: function(){
@@ -133,7 +138,7 @@ var specialApp = new Vue({
 				{x: xScale(1), y: yScale(distance+trainlength)}
 			])).attr("fill", "grey").attr("opacity", "0.3").attr("class", "mountain");
 		// points for the minkowski diagram
-		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
+		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "door");
 	},
 	watch: {
 		speed: function(){
@@ -143,35 +148,37 @@ var specialApp = new Vue({
 });
 // animation testing sorta
 // TODO: name the animations
-anime({
-	targets: "#observer #observetrain",
-	translateX: {
-		value: 1100,
-		duration: 10000,
-		easing: "linear",
-	},
-	scaleX: {
-		value: 1/tempgamma,
-		duration: 0,
-	}
-});
-// anime({
-// 	targets: "#lightspeed #mountain",
-// 	translateX: {
-// 		value: -1100,
-// 		duration: 10000,
-// 		easing: "linear",
-// 	},
-// 	scaleX: {
-// 		value: 1/tempgamma,
-// 		duration: 0,
-// 	},
-// });
-anime({
-	targets: ["#lightspeed #doorB", "#observer #doorB"],
-	translateY: {
-		value: 72,
-		duration: 1000,
-		easing: "linear",
-	}
-});
+function playAnimation(){
+	anime({
+		targets: "#observer #observetrain",
+		translateX: {
+			value: 1100,
+			duration: 10000,
+			easing: "linear",
+		},
+		scaleX: {
+			value: 1/tempgamma,
+			duration: 0,
+		}
+	});
+	anime({
+		targets: "#lightspeed #mountain",
+		translateX: {
+			value: -1100,
+			duration: 10000,
+			easing: "linear",
+		},
+		scaleX: {
+			value: 1/tempgamma,
+			duration: 0,
+		},
+	});
+	anime({
+		targets: ["#lightspeed #doorB", "#observer #doorB"],
+		translateY: {
+			value: 72,
+			duration: 1000,
+			easing: "linear",
+		}
+	});
+}
