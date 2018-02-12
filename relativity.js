@@ -1,6 +1,9 @@
 // PERSONAL NOTES
 // 1 pixel = 400000 meters
 
+const trainlength = 0.15;
+const mountainlength = 0.13;
+const distance = 0.101;
 // set up graph
 var margin = { top: 30, right: 30, bottom: 30, left: 30 },
 		width = 640 - margin.left - margin.right,
@@ -67,7 +70,6 @@ svgSelection.append("g")
 	.attr("transform", "translate(" + temptransformXScale(0) + ", " + 0 + ") rotate ("+tempangle+", 0,"+temptransformYScale(0)+")")
 	.attr("class", "redAxis");
 
-const trainlength = 0.15;
 // constant light speed graph
 svgSelection.append("path").attr("d", line([
 		{x: 0, y: height},
@@ -124,6 +126,12 @@ var specialApp = new Vue({
 				{x: xScale(1), y: yScale(this.speed+trainlength)},
 				{x: xScale(1), y: yScale(this.speed)}
 			])).attr("fill", "teal").attr("opacity", "0.3").attr("class", "train");
+		d3.select("#transform").append("path").attr("d", line([
+				{x: xScale(0), y: yScale(distance+trainlength)},
+				{x: xScale(0), y: yScale(distance+trainlength+mountainlength)},
+				{x: xScale(1), y: yScale(distance+trainlength+mountainlength)},
+				{x: xScale(1), y: yScale(distance+trainlength)}
+			])).attr("fill", "grey").attr("opacity", "0.3").attr("class", "mountain");
 		// points for the minkowski diagram
 		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
 	},
@@ -140,7 +148,6 @@ anime({
 	translateX: {
 		value: 1100,
 		duration: 10000,
-		delay: 1000,
 		easing: "linear",
 	},
 	scaleX: {
@@ -148,21 +155,20 @@ anime({
 		duration: 0,
 	}
 });
+// anime({
+// 	targets: "#lightspeed #mountain",
+// 	translateX: {
+// 		value: -1100,
+// 		duration: 10000,
+// 		easing: "linear",
+// 	},
+// 	scaleX: {
+// 		value: 1/tempgamma,
+// 		duration: 0,
+// 	},
+// });
 anime({
-	targets: "#lightspeed #mountain",
-	translateX: {
-		value: -1100,
-		duration: 10000,
-		delay: 1000,
-		easing: "linear",
-	},
-	scaleX: {
-		value: 1/tempgamma,
-		duration: 0,
-	},
-});
-anime({
-	targets: "#lightspeed #doorA",
+	targets: ["#lightspeed #doorB", "#observer #doorB"],
 	translateY: {
 		value: 72,
 		duration: 1000,
