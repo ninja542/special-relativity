@@ -149,6 +149,7 @@ var specialApp = new Vue({
 // animation testing sorta
 // TODO: name the animations
 function playAnimation(){
+	anime.speed = 1;
 	anime({
 		targets: "#observer #observetrain",
 		translateX: {
@@ -157,7 +158,7 @@ function playAnimation(){
 			easing: "linear",
 		},
 		scaleX: {
-			value: 1/tempgamma,
+			value: 1/specialApp.gamma,
 			duration: 0,
 		}
 	});
@@ -169,7 +170,42 @@ function playAnimation(){
 			easing: "linear",
 		},
 		scaleX: {
-			value: 1/tempgamma,
+			value: 1/specialApp.gamma,
+			duration: 0,
+		},
+	});
+	anime({
+		targets: ["#lightspeed #doorB", "#observer #doorB"],
+		translateY: {
+			value: 72,
+			duration: 1000,
+			easing: "linear",
+		}
+	});
+}
+function different(){
+	anime.speed = 0.5;
+	anime({
+		targets: "#observer #observetrain",
+		translateX: {
+			value: 1100,
+			duration: 10000,
+			easing: "linear",
+		},
+		scaleX: {
+			value: 1/specialApp.gamma,
+			duration: 0,
+		}
+	});
+	anime({
+		targets: "#lightspeed #mountain",
+		translateX: {
+			value: -1100,
+			duration: 10000,
+			easing: "linear",
+		},
+		scaleX: {
+			value: 1/specialApp.gamma,
 			duration: 0,
 		},
 	});
