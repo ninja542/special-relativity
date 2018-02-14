@@ -3,7 +3,7 @@
 
 const trainlength = 0.15;
 const mountainlength = 0.13;
-const distance = 0.101;
+const distance = 0.1;
 // set up graph
 var margin = { top: 30, right: 30, bottom: 30, left: 30 },
 		width = 640 - margin.left - margin.right,
@@ -96,8 +96,8 @@ var specialApp = new Vue({
 				.attr("transform", "translate(" + xScale(0) + ", " + 0 + ") rotate ("+(-this.angle)+", 0,"+yScale(0)+")");
 			d3.select(".train").attr("d", line([
 				{x: xScale(0), y: yScale(0)},
-				{x: xScale(0), y: yScale(trainlength)},
-				{x: xScale(1), y: yScale(this.speed+trainlength)},
+				{x: xScale(0), y: yScale(trainlength/this.gamma)},
+				{x: xScale(1), y: yScale(this.speed+trainlength/this.gamma)},
 				{x: xScale(1), y: yScale(this.speed)}
 			]));
 			var data =  d3.select("#transform").selectAll("circle").data(this.door);
@@ -114,7 +114,7 @@ var specialApp = new Vue({
 	},
 	computed: {
 		gamma: function(){
-			return 1/(Math.sqrt(1-Math.pow(this.speed, 2))/1);
+			return 1/(Math.sqrt(1-Math.pow(this.speed, 2)));
 		},
 		angle: function(){
 			return Math.atan(this.speed)*180/Math.PI;
@@ -127,8 +127,8 @@ var specialApp = new Vue({
 	mounted: function(){
 		d3.select("#transform").append("path").attr("d", line([
 				{x: xScale(0), y: yScale(0)},
-				{x: xScale(0), y: yScale(trainlength)},
-				{x: xScale(1), y: yScale(this.speed+trainlength)},
+				{x: xScale(0), y: yScale(trainlength/this.gamma)},
+				{x: xScale(1), y: yScale(this.speed+trainlength/this.gamma)},
 				{x: xScale(1), y: yScale(this.speed)}
 			])).attr("fill", "teal").attr("opacity", "0.3").attr("class", "train");
 		d3.select("#transform").append("path").attr("d", line([
@@ -137,6 +137,9 @@ var specialApp = new Vue({
 				{x: xScale(1), y: yScale(distance+trainlength+mountainlength)},
 				{x: xScale(1), y: yScale(distance+trainlength)}
 			])).attr("fill", "grey").attr("opacity", "0.3").attr("class", "mountain");
+		d3.select("#transform").append("path").attr("d", line([
+				{x: xScale(trainlength+distance)/this.speed, y: yScale(trainlength+distance)}
+			]));
 		// points for the minkowski diagram
 		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "door");
 	},
@@ -150,41 +153,6 @@ var specialApp = new Vue({
 // TODO: name the animations
 function playAnimation(){
 	anime.speed = 1;
-	anime({
-		targets: "#observer #observetrain",
-		translateX: {
-			value: 1100,
-			duration: 10000,
-			easing: "linear",
-		},
-		scaleX: {
-			value: 1/specialApp.gamma,
-			duration: 0,
-		}
-	});
-	anime({
-		targets: "#lightspeed #mountain",
-		translateX: {
-			value: -1100,
-			duration: 10000,
-			easing: "linear",
-		},
-		scaleX: {
-			value: 1/specialApp.gamma,
-			duration: 0,
-		},
-	});
-	anime({
-		targets: ["#lightspeed #doorB", "#observer #doorB"],
-		translateY: {
-			value: 72,
-			duration: 1000,
-			easing: "linear",
-		}
-	});
-}
-function different(){
-	anime.speed = 0.5;
 	anime({
 		targets: "#observer #observetrain",
 		translateX: {
