@@ -1,5 +1,5 @@
 // PERSONAL NOTES
-// 1 pixel = 400000 meters
+// 1 pixel = 400000 meters about I think last time I checked rip. 1 s = 1 s in real life
 
 const trainlength = 0.15;
 const mountainlength = 0.13;
@@ -36,14 +36,15 @@ var line = d3.line().x(function(d){ return d.x; }).y(function(d){ return d.y; })
 // transformed graph
 // speed is in units of c
 var tempspeed = 0.4;
+// angle of the graph itself
+var tempangle = Math.atan(tempspeed)*180/Math.PI;
+var tempanglerad = Math.atan(tempspeed);
 // for the lorentz transformation
 var tempgamma = 1/(Math.sqrt(1-Math.pow(tempspeed, 2))/1);
 var temptransformXScale = d3.scaleLinear().domain([0, 1/tempgamma]).range([0, width]);
 var temptransformXAxis = d3.axisBottom(temptransformXScale);
-var temptransformYScale = d3.scaleLinear().domain([1/tempgamma, 0]).range([0, height]);
+var temptransformYScale = d3.scaleLinear().domain([0, 1/tempgamma]).range([Math.abs(height/Math.cos(tempanglerad)), 0]);
 var temptransformYAxis = d3.axisLeft(temptransformYScale);
-// angle of the graph itself
-var tempangle = Math.atan(tempspeed)*180/Math.PI;
 // gridlines
 svgSelection.append("g").call(d3.axisBottom(temptransformXScale).ticks(20).tickSize(-height).tickFormat(""))
 	.attr("transform", "translate(" + 0 + ", " + temptransformYScale(0) + ") rotate ("+(tempangle)+","+(temptransformXScale(0))+","+ "0"+")")
@@ -61,13 +62,13 @@ svgSelection.append("g").call(d3.axisLeft(temptransformYScale).ticks(20).tickSiz
 // axes
 svgSelection.append("g")
 	.attr("id", "specialX")
-	.attr("transform", "translate(" + 0 + ", " + temptransformYScale(0) + ") rotate ("+(-tempangle)+","+(temptransformXScale(0))+","+ "0"+")")
+	.attr("transform", "translate(" + 0 + ", " + (temptransformYScale(0)+height-Math.abs(height/Math.cos(tempanglerad))) + ") rotate ("+(-tempangle)+","+(temptransformXScale(0))+","+ "0"+")")
 	.attr("class", "redAxis")
 	.call(temptransformXAxis);
 svgSelection.append("g")
 	.attr("id", "specialY")
 	.call(temptransformYAxis)
-	.attr("transform", "translate(" + temptransformXScale(0) + ", " + 0 + ") rotate ("+tempangle+", 0,"+temptransformYScale(0)+")")
+	.attr("transform", "translate(" + temptransformXScale(0) + ", " + (height-Math.abs(height/Math.cos(tempanglerad))) + ") rotate ("+tempangle+", 0,"+temptransformYScale(0)+")")
 	.attr("class", "redAxis");
 
 // constant light speed graph
@@ -109,7 +110,7 @@ var specialApp = new Vue({
 			return d3.scaleLinear().domain([0, 1/this.gamma]).range([0, width]);
 		},
 		transformYScale: function(){
-			return d3.scaleLinear().domain([1/this.gamma, 0]).range([0, height]);
+			return d3.scaleLinear().domain([1/this.gamma, 0]).range([0, height/Math.cos(this.angle)]);
 		}
 	},
 	computed: {
@@ -118,6 +119,9 @@ var specialApp = new Vue({
 		},
 		angle: function(){
 			return Math.atan(this.speed)*180/Math.PI;
+		},
+		anglerad: function(){
+			return Math.atan(this.speed);
 		},
 		door: function(){
 			return [{x: (distance + mountainlength)/this.speed, y: trainlength+distance+mountainlength},
@@ -149,6 +153,7 @@ var specialApp = new Vue({
 		}
 	}
 });
+d3.select("#transform").append("circle").attr("cx", xScale(0)).attr("cy", yScale(0)).attr("fill", "none").attr("stroke", "black").attr("r", temptransformYScale(0.15)).attr("stroke-width", 1);
 // animation testing sorta
 // TODO: name the animations
 function playAnimation(){
