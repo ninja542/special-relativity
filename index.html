@@ -8,8 +8,8 @@
 			<div id="controls">
 				<input id="slider" type="range" min="0" max="1" step="0.01" value="0.1" v-model.number="speed">
 				<div>{{speed}} c</div>
-				<button>Play Animation</button>
-				<button>Stop</button>
+				<button class="play">Play Animation</button>
+				<button class="pause">Pause</button>
 				<input type="range" name="speed" v-model.number="animationspeed" min="0.01" max="1" step="0.01">Animation Speed
 				<input type="radio" name="speed" v-model.number="animationspeed" value="1" id="normal">
 					<label for="normal">1x</label>
@@ -23,6 +23,7 @@
 			<div id="everything">
 				<div>
 					<div id="lightspeed">
+						<p>Train frame of reference</p>
 						<div id="lighttrain">
 							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="150" xmlns="http://www.w3.org/2000/svg">
 								<g>
@@ -74,6 +75,7 @@
 						</div>
 					</div>
 					<div id="observer">
+						<p>Observer frame of reference</p>
 						<div id="observetrain">
 							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="150" xmlns="http://www.w3.org/2000/svg">
 								<path class="cls-1" d="M328.22,53.29A6.64,6.64,0,0,1,326,65.36a9.5,9.5,0,0,0-19,.14h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0H83a9.5,9.5,0,0,0-19,0H56a9.5,9.5,0,0,0-19,0H29a9.5,9.5,0,0,0-19,0H9.25A8.76,8.76,0,0,1,.66,58.4L22,45.5H316l.07-.11Z"/>

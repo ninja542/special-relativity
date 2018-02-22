@@ -112,7 +112,7 @@ var specialApp = new Vue({
 		},
 		transformYScale: function(){
 			return d3.scaleLinear().domain([1/this.gamma, 0]).range([0, Math.abs(height/Math.cos(this.anglerad))]);
-		}
+		},
 	},
 	computed: {
 		gamma: function(){
@@ -151,14 +151,20 @@ var specialApp = new Vue({
 	watch: {
 		speed: function(){
 			this.update();
+		},
+		animationspeed: function(){
+			anime.speed = this.animationspeed;
 		}
 	}
 });
 // animation testing sorta
 // TODO: name the animations
-function playAnimation(){
-	anime.speed = 1;
-	anime({
+let timeline = anime.timeline({
+	loop: false,
+	autoplay: false
+});
+timeline
+	.add({
 		targets: "#observer #observetrain",
 		translateX: {
 			value: 1100,
@@ -168,9 +174,10 @@ function playAnimation(){
 		scaleX: {
 			value: 1/specialApp.gamma,
 			duration: 0,
-		}
-	});
-	anime({
+		},
+		offset: 0
+	})
+	.add({
 		targets: "#lightspeed #mountain",
 		translateX: {
 			value: -1100,
@@ -181,13 +188,16 @@ function playAnimation(){
 			value: 1/specialApp.gamma,
 			duration: 0,
 		},
-	});
-	anime({
+		offset: 0
+	})
+	.add({
 		targets: ["#lightspeed #doorB", "#observer #doorB"],
 		translateY: {
 			value: 72,
 			duration: 1000,
 			easing: "linear",
-		}
+		},
+		offset: 0
 	});
-}
+document.querySelector(".play").onclick = timeline.restart;
+document.querySelector(".pause").onclick = timeline.pause;
