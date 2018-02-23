@@ -76,12 +76,15 @@ svgSelection.append("path").attr("d", line([
 		{x: 0, y: height},
 		{x: width, y: 0}
 	])).attr("stroke", "yellow").attr("stroke-width", 1);
+
 // vue app
 var specialApp = new Vue({
 	el: "#wrapper",
 	data: {
 		speed: 0.4,
 		animationspeed: 1,
+		play: false,
+		scale: 'scaleX('+(1/this.gamma)+')',
 	},
 	methods: {
 		update: function(){
@@ -154,13 +157,13 @@ var specialApp = new Vue({
 		},
 		animationspeed: function(){
 			anime.speed = this.animationspeed;
-		}
+		},
 	}
 });
 // animation testing sorta
 // TODO: name the animations
 let timeline = anime.timeline({
-	loop: false,
+	loop: true,
 	autoplay: false
 });
 timeline
@@ -171,10 +174,6 @@ timeline
 			duration: 10000,
 			easing: "linear",
 		},
-		scaleX: {
-			value: 1/specialApp.gamma,
-			duration: 0,
-		},
 		offset: 0
 	})
 	.add({
@@ -184,20 +183,17 @@ timeline
 			duration: 10000,
 			easing: "linear",
 		},
-		scaleX: {
-			value: 1/specialApp.gamma,
-			duration: 0,
-		},
 		offset: 0
 	})
 	.add({
 		targets: ["#lightspeed #doorB", "#observer #doorB"],
 		translateY: {
 			value: 72,
-			duration: 1000,
+			duration: 100,
 			easing: "linear",
 		},
 		offset: 0
 	});
-document.querySelector(".play").onclick = timeline.restart;
+document.querySelector(".play").onclick = timeline.play;
 document.querySelector(".pause").onclick = timeline.pause;
+document.querySelector(".restart").onclick = timeline.restart;
