@@ -131,6 +131,41 @@ var specialApp = new Vue({
 			return [{x: (distance + mountainlength)/this.speed, y: trainlength+distance+mountainlength},
 			{x: (trainlength+distance)/this.speed, y: trainlength+distance}];
 		},
+		timeline: function(){
+			let timeline = anime.timeline({
+				loop: true,
+				autoplay: false
+			});
+			timeline
+				.add({
+					targets: "#observer #observetrain",
+					translateX: {
+						value: 1100,
+						duration: 10000,
+						easing: "linear",
+					},
+					offset: 0
+				})
+				.add({
+					targets: "#lightspeed #mountain",
+					translateX: {
+						value: -1100,
+						duration: 10000,
+						easing: "linear",
+					},
+					offset: 0
+				})
+				.add({
+					targets: ["#lightspeed #doorB", "#observer #doorB"],
+					translateY: {
+						value: 72,
+						duration: 100,
+						easing: "linear",
+					},
+					offset: 0
+				});
+			return timeline;
+		}
 	},
 	mounted: function(){
 		d3.select("#transform").append("path").attr("d", line([
@@ -160,40 +195,6 @@ var specialApp = new Vue({
 		},
 	}
 });
-// animation testing sorta
-// TODO: name the animations
-let timeline = anime.timeline({
-	loop: true,
-	autoplay: false
-});
-timeline
-	.add({
-		targets: "#observer #observetrain",
-		translateX: {
-			value: 1100,
-			duration: 10000,
-			easing: "linear",
-		},
-		offset: 0
-	})
-	.add({
-		targets: "#lightspeed #mountain",
-		translateX: {
-			value: -1100,
-			duration: 10000,
-			easing: "linear",
-		},
-		offset: 0
-	})
-	.add({
-		targets: ["#lightspeed #doorB", "#observer #doorB"],
-		translateY: {
-			value: 72,
-			duration: 100,
-			easing: "linear",
-		},
-		offset: 0
-	});
-document.querySelector(".play").onclick = timeline.play;
-document.querySelector(".pause").onclick = timeline.pause;
-document.querySelector(".restart").onclick = timeline.restart;
+document.querySelector(".play").onclick = specialApp.timeline.play;
+document.querySelector(".pause").onclick = specialApp.timeline.pause;
+document.querySelector(".restart").onclick = specialApp.timeline.restart;
