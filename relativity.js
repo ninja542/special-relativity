@@ -1,5 +1,6 @@
 // PERSONAL NOTES
 // 1 pixel = 400000 meters about I think last time I checked rip. 1 s = 1 s in real life
+// 150 pixels turns into 0.15c, so 1 pixel = 0.001 c = 3e5 meters so 300000 meters
 
 const trainlength = 0.15;
 const mountainlength = 0.13;
@@ -82,9 +83,11 @@ var specialApp = new Vue({
 	el: "#wrapper",
 	data: {
 		speed: 0.4,
+		// animationspeed: 0.001,
 		animationspeed: 1,
 		play: false,
 		scale: 'scaleX('+(1/this.gamma)+')',
+		time: 10000
 	},
 	methods: {
 		update: function(){
@@ -116,6 +119,15 @@ var specialApp = new Vue({
 		transformYScale: function(){
 			return d3.scaleLinear().domain([1/this.gamma, 0]).range([0, Math.abs(height/Math.cos(this.anglerad))]);
 		},
+		playAnimation: function(){
+			this.timeline.play();
+		},
+		restartAnimation: function(){
+			this.timeline.restart();
+		},
+		pauseAnimation: function(){
+			this.timeline.pause();
+		}
 	},
 	computed: {
 		gamma: function(){
@@ -139,20 +151,16 @@ var specialApp = new Vue({
 			timeline
 				.add({
 					targets: "#observer #observetrain",
-					translateX: {
-						value: 1100,
-						duration: 10000,
-						easing: "linear",
-					},
+					translateX: 1100,
+					duration: this.speed*10000,
+					easing: "linear",
 					offset: 0
 				})
 				.add({
 					targets: "#lightspeed #mountain",
-					translateX: {
-						value: -1100,
-						duration: 10000,
-						easing: "linear",
-					},
+					translateX: -1100,
+					duration: this.speed*10000,
+					easing: "linear",
 					offset: 0
 				})
 				.add({
@@ -195,6 +203,6 @@ var specialApp = new Vue({
 		},
 	}
 });
-document.querySelector(".play").onclick = specialApp.timeline.play;
-document.querySelector(".pause").onclick = specialApp.timeline.pause;
-document.querySelector(".restart").onclick = specialApp.timeline.restart;
+// document.querySelector(".play").onclick = specialApp.timeline.play;
+// document.querySelector(".pause").onclick = specialApp.timeline.pause;
+// document.querySelector(".restart").onclick = specialApp.timeline.restart;

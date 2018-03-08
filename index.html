@@ -8,18 +8,11 @@
 			<div id="controls">
 				<input id="slider" type="range" min="0" max="1" step="0.01" value="0.1" v-model.number="speed">
 				<div>{{speed}} c</div>
-				<button class="play" v-on:click="play=true" v-show="!play">Play</button>
-				<button class="pause" v-on:click="play=false" v-show="play">Pause</button>
-				<button class="restart" v-on:click="play=true">Restart</button>
-				<input type="range" name="speed" v-model.number="animationspeed" min="0.01" max="1" step="0.01">Animation Speed
-				<input type="radio" name="speed" v-model.number="animationspeed" value="1" id="normal">
-					<label for="normal">1x</label>
-				<input type="radio" name="speed" v-model.number="animationspeed" value="0.5" id="half">
-					<label for="half">0.5x</label>
-				<input type="radio" name="speed" v-model.number="animationspeed" value="0.25" id="quarter">
-					<label for="quarter">0.25x</label>
-				<input type="radio" name="speed" v-model.number="animationspeed" value="0.01" id="slow">
-					<label for="slow">0.01x</label>
+				<button class="play" v-on:click="play=true, playAnimation()" v-show="!play">Play</button>
+				<button class="pause" v-on:click="play=false, pauseAnimation()" v-show="play">Pause</button>
+				<button class="restart" v-on:click="play=true, restartAnimation()">Restart</button>
+				<input type="range" name="speed" v-model.number="animationspeed" min="0.0001" max="0.01" step="0.0001">Animation Speed:
+				<label> {{animationspeed}}x </label>
 			</div>
 			<div id="everything">
 				<div>
