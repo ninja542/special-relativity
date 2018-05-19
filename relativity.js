@@ -1,10 +1,17 @@
 // PERSONAL NOTES
 // 1 pixel = 400000 meters about I think last time I checked rip. 1 s = 1 s in real life
 // 150 pixels turns into 0.15c, so 1 pixel = 0.001 c = 3e5 meters so 300000 meters
-
 const trainlength = 0.15;
 const mountainlength = 0.13;
 const distance = 0.1;
+
+function round (number, precision) {
+    var factor = Math.pow(10, precision);
+    var tempNumber = number * factor;
+    var roundedTempNumber = Math.round(tempNumber);
+    return roundedTempNumber / factor;
+}
+
 // set up graph
 var margin = { top: 30, right: 30, bottom: 30, left: 30 },
 		width = 640 - margin.left - margin.right,
@@ -79,15 +86,15 @@ svgSelection.append("path").attr("d", line([
 	])).attr("stroke", "yellow").attr("stroke-width", 1);
 
 // vue app
-var specialApp = new Vue({
+var app = new Vue({
 	el: "#wrapper",
 	data: {
 		speed: 0.4,
-		// animationspeed: 0.001,
 		animationspeed: 1,
 		play: false,
 		scale: 'scaleX('+(1/this.gamma)+')',
-		time: 10000
+		time: 0.00,
+		control: 'play',
 	},
 	methods: {
 		update: function(){
@@ -127,7 +134,31 @@ var specialApp = new Vue({
 		},
 		pauseAnimation: function(){
 			this.timeline.pause();
-		}
+		},
+		updateTime: function(){
+			if(this.control == "play"){
+				this.advanceTime();
+			}
+		},
+		advanceTime: function(){
+			if (this.time >= 1){
+				this.time = 0;
+			}
+			else{
+				this.time += 0.01 * this.animationspeed;
+			}
+			this.time = round(this.time, 4);
+		},
+		animate: function(thing){
+			// animation frame is native and it allows for the animation to stop when focus is on another area
+			let animation = window.requestAnimationFrame ||
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			function(callback){
+				window.setTimeout(callback, 100);
+			};
+			return animation(thing);
+		},
 	},
 	computed: {
 		gamma: function(){
@@ -206,3 +237,12 @@ var specialApp = new Vue({
 // document.querySelector(".play").onclick = specialApp.timeline.play;
 // document.querySelector(".pause").onclick = specialApp.timeline.pause;
 // document.querySelector(".restart").onclick = specialApp.timeline.restart;
+
+let step = function(){
+	app.advanceTime();
+	app.animate(step);
+};
+
+window.onload = function(){
+	app.animate(step);
+};
