@@ -8,9 +8,9 @@
 			<div id="controls">
 				<input id="slider" type="range" min="0" max="1" step="0.01" value="0.1" v-model.number="speed">
 				<div>{{speed}} c</div>
-				<button class="play" v-on:click="play=true, playAnimation()" v-show="!play">Play</button>
-				<button class="pause" v-on:click="play=false, pauseAnimation()" v-show="play">Pause</button>
-				<button class="restart" v-on:click="play=true, restartAnimation()">Restart</button>
+				<button class="play" v-on:click="control='play'" v-show="control!='play'">Play</button>
+				<button class="pause" v-on:click="control='pause'" v-show="control=='play'">Pause</button>
+				<button class="restart" v-on:click="control='restart'">Restart</button>
 				<input type="range" name="speed" v-model.number="animationspeed" min="0.001" max="1" step="0.001">Animation Speed:
 				<label> {{animationspeed}}x </label>
 				<p>{{time}}</p>
@@ -19,7 +19,7 @@
 				<div>
 					<div id="lightspeed">
 						<p>Train frame of reference</p>
-						<div id="lighttrain">
+						<div id="lighttrain" v-bind:style="{left: speed * time}">
 							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="150" xmlns="http://www.w3.org/2000/svg">
 								<g>
 									<path class="cls-1" d="M328.22,53.29A6.64,6.64,0,0,1,326,65.36a9.5,9.5,0,0,0-19,.14h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0H83a9.5,9.5,0,0,0-19,0H56a9.5,9.5,0,0,0-19,0H29a9.5,9.5,0,0,0-19,0H9.25A8.76,8.76,0,0,1,.66,58.4L22,45.5H316l.07-.11Z"/>

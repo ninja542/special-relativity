@@ -91,10 +91,9 @@ var app = new Vue({
 	data: {
 		speed: 0.4,
 		animationspeed: 1,
-		play: false,
 		scale: 'scaleX('+(1/this.gamma)+')',
 		time: 0.00,
-		control: 'play',
+		control: 'pause',
 	},
 	methods: {
 		update: function(){
@@ -145,9 +144,17 @@ var app = new Vue({
 				this.time = 0;
 			}
 			else{
-				this.time += 0.01 * this.animationspeed;
+				if(this.control == "play"){
+					this.time += 0.001 * this.animationspeed;
+				}
+				else if(this.control == "pause"){
+					this.time += 0;
+				}
+				else if(this.control == "restart"){
+					this.time = 0;
+				}
 			}
-			this.time = round(this.time, 4);
+			this.time = round(this.time, 6);
 		},
 		animate: function(thing){
 			// animation frame is native and it allows for the animation to stop when focus is on another area
@@ -155,7 +162,7 @@ var app = new Vue({
 			window.webkitRequestAnimationFrame ||
 			window.mozRequestAnimationFrame ||
 			function(callback){
-				window.setTimeout(callback, 100);
+				window.setTimeout(callback, 1000/60);
 			};
 			return animation(thing);
 		},
