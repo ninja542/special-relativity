@@ -85,6 +85,8 @@ svgSelection.append("path").attr("d", line([
 		{x: width, y: 0}
 	])).attr("stroke", "yellow").attr("stroke-width", 1);
 
+d3.select("#transform").append("rect").attr("fill", "blue").attr("width", 8).attr("height", 8).attr("class", "trainpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
+
 // vue app
 var app = new Vue({
 	el: "#wrapper",
@@ -155,6 +157,7 @@ var app = new Vue({
 				}
 			}
 			this.time = round(this.time, 6);
+			d3.select(".trainpoint").attr("x", xScale(this.time)-4).attr("y", yScale(this.time * this.speed)-4);
 		},
 		animate: function(thing){
 			// animation frame is native and it allows for the animation to stop when focus is on another area
@@ -166,6 +169,8 @@ var app = new Vue({
 			};
 			return animation(thing);
 		},
+		updatePoints: function(){
+		}
 	},
 	computed: {
 		gamma: function(){
@@ -230,7 +235,7 @@ var app = new Vue({
 				{x: xScale(trainlength+distance)/this.speed, y: yScale(trainlength+distance)}
 			]));
 		// points for the minkowski diagram
-		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "door");
+		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "point");
 	},
 	watch: {
 		speed: function(){
