@@ -1,5 +1,6 @@
 // PERSONAL NOTES
 // 1 pixel = 400000 meters about I think last time I checked rip. 1 s = 1 s in real life
+// 250 pixels covered in 0.4 * 3e+8 speed of light * 0.625 seconds
 // 150 pixels turns into 0.15c, so 1 pixel = 0.001 c = 3e5 meters so 300000 meters
 const trainlength = 0.15;
 const mountainlength = 0.13;

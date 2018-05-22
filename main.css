@@ -43,7 +43,7 @@
 	top: 145px;
 }
 #observer #observetrain svg{
-	transform-origin: 100%;
+	transform-origin: 0%;
 }
 #lightspeed #mountain,  #observer #mountain {
 	position: relative;
