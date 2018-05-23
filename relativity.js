@@ -128,15 +128,6 @@ var app = new Vue({
 		transformYScale: function(){
 			return d3.scaleLinear().domain([1/this.gamma, 0]).range([0, Math.abs(height/Math.cos(this.anglerad))]);
 		},
-		playAnimation: function(){
-			this.timeline.play();
-		},
-		restartAnimation: function(){
-			this.timeline.restart();
-		},
-		pauseAnimation: function(){
-			this.timeline.pause();
-		},
 		updateTime: function(){
 			if(this.control == "play"){
 				this.advanceTime();
@@ -190,37 +181,7 @@ var app = new Vue({
 				{x: (trainlength+distance)/this.speed, y: trainlength+distance+(trainlength/this.gamma)}
 			];
 		},
-		timeline: function(){
-			let timeline = anime.timeline({
-				loop: true,
-				autoplay: false
-			});
-			timeline
-				.add({
-					targets: "#observer #observetrain",
-					translateX: 1100,
-					duration: this.speed*10000,
-					easing: "linear",
-					offset: 0
-				})
-				.add({
-					targets: "#lightspeed #mountain",
-					translateX: -1100,
-					duration: this.speed*10000,
-					easing: "linear",
-					offset: 0
-				})
-				.add({
-					targets: ["#lightspeed #doorB", "#observer #doorB"],
-					translateY: {
-						value: 72,
-						duration: 100,
-						easing: "linear",
-					},
-					offset: 0
-				});
-			return timeline;
-		}
+
 	},
 	mounted: function(){
 		d3.select("#transform").append("path").attr("d", line([
@@ -244,9 +205,6 @@ var app = new Vue({
 	watch: {
 		speed: function(){
 			this.update();
-		},
-		animationspeed: function(){
-			anime.speed = this.animationspeed;
 		},
 	}
 });

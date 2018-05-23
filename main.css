@@ -19,7 +19,7 @@
 
 #lightspeed, #observer {
 	box-sizing: border-box;
-	padding: 20px;
+	padding: 0px;
 	height: 320px;
 	width: 640px;
 	overflow: hidden;
@@ -52,7 +52,7 @@
 	transform-origin: left center;
 }
 #graph {
-	margin-top: -160px;
+	margin-top: -200px;
 }
 .x-label {
 	position: relative;

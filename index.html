@@ -12,8 +12,8 @@
 				<button class="pause" v-on:click="control='pause'" v-show="control=='play'">Pause</button>
 				<button class="restart" v-on:click="control='restart'">Restart</button>
 				<input type="range" name="speed" v-model.number="animationspeed" min="0.001" max="1" step="0.001">Animation Speed:
-				<label> {{animationspeed}}x </label>
-				<p>{{time}}</p>
+				<label> {{animationspeed}}x, time = {{time}} seconds</label>
+				<p></p>
 			</div>
 			<div id="everything">
 				<div>
