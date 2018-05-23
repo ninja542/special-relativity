@@ -184,8 +184,11 @@ var app = new Vue({
 			return Math.atan(this.speed);
 		},
 		door: function(){
-			return [{x: (distance + mountainlength)/this.speed, y: trainlength+distance+mountainlength},
-			{x: (trainlength+distance)/this.speed, y: trainlength+distance}];
+			return [
+				// {x: ((distance+mountainlength+(trainlength - trainlength/this.gamma))/this.speed), y: trainlength+distance+mountainlength},
+				{x: (trainlength+distance)/this.speed, y: trainlength+distance},
+				{x: (trainlength+distance)/this.speed, y: trainlength+distance+(trainlength/this.gamma)}
+			];
 		},
 		timeline: function(){
 			let timeline = anime.timeline({
@@ -247,9 +250,6 @@ var app = new Vue({
 		},
 	}
 });
-// document.querySelector(".play").onclick = specialApp.timeline.play;
-// document.querySelector(".pause").onclick = specialApp.timeline.pause;
-// document.querySelector(".restart").onclick = specialApp.timeline.restart;
 
 let step = function(){
 	app.advanceTime();
