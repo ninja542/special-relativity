@@ -12,13 +12,13 @@
 				<button class="pause" v-on:click="control='pause'" v-show="control=='play'">Pause</button>
 				<button class="restart" v-on:click="control='restart'">Restart</button>
 				<input type="range" name="speed" v-model.number="animationspeed" min="0.001" max="1" step="0.001">Animation Speed:
-				<label> {{animationspeed}}x, time = {{time}} seconds</label>
+				<label> {{animationspeed}}x</label>
 				<p></p>
 			</div>
 			<div id="everything">
 				<div>
 					<div id="lightspeed">
-						<p>Train frame of reference</p>
+						<p>Train frame of reference, time = {{time * gamma}} seconds</p>
 						<div id="lighttrain">
 							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="150" xmlns="http://www.w3.org/2000/svg">
 								<g>
@@ -69,8 +69,10 @@
 							</svg>
 						</div>
 					</div>
+					<div id="distance">
+					</div>
 					<div id="observer">
-						<p>Observer frame of reference</p>
+						<p>Observer frame of reference, time = {{time}} seconds</p>
 						<div id="observetrain" v-bind:style="{left: speed * time * 3e+8 / 3e+5}">
 							<svg viewbox="0 0 332 75" height="35" v-bind:style="{transform: 'scaleX('+(1/gamma)+')'}" preserveAspectRatio="none" width="150" xmlns="http://www.w3.org/2000/svg">
 								<path class="cls-1" d="M328.22,53.29A6.64,6.64,0,0,1,326,65.36a9.5,9.5,0,0,0-19,.14h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0h-8a9.5,9.5,0,0,0-19,0H83a9.5,9.5,0,0,0-19,0H56a9.5,9.5,0,0,0-19,0H29a9.5,9.5,0,0,0-19,0H9.25A8.76,8.76,0,0,1,.66,58.4L22,45.5H316l.07-.11Z"/>
@@ -127,7 +129,7 @@
 			</div>
 		</div>
 		<script src="https://d3js.org/d3.v5.min.js"></script>
-		<script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+		<script src="https://vuejs.org/js/vue.js"></script>
 		<script src="anime.min.js"></script>
 		<script src="relativity.js"></script>
 	</body>

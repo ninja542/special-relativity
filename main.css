@@ -20,9 +20,16 @@
 #lightspeed, #observer {
 	box-sizing: border-box;
 	padding: 0px;
-	height: 320px;
+	height: 300px;
 	width: 640px;
 	overflow: hidden;
+}
+#distance {
+	width: 640px;
+	height: 10px;
+}
+#distance svg {
+	width: 640px;
 }
 .grid line {
   stroke: lightgrey;

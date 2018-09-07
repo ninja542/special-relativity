@@ -5,6 +5,47 @@
 const trainlength = 0.15;
 const mountainlength = 0.13;
 const distance = 0.1;
+// animations done using anime library
+function doorAClose(){
+	anime({
+		targets: "#lightspeed #doorA",
+		translateY: {
+			value: 72,
+			duration: 1000,
+			easing: "linear",
+		}
+	});
+}
+function doorBClose(){
+	anime({
+		targets: "#lightspeed #doorB",
+		translateY: {
+			value: 72,
+			duration: 1000,
+			easing: "linear",
+		}
+	});
+}
+function doorAOpen(){
+	anime({
+		targets: "#lightspeed #doorA",
+		translateY: {
+			value: -72,
+			duration: 1000,
+			easing: "linear",
+		}
+	});
+}
+function doorBOpen(){
+	anime({
+		targets: "#lightspeed #doorB",
+		translateY: {
+			value: -72,
+			duration: 1000,
+			easing: "linear",
+		}
+	});
+}
 
 function round (number, precision) {
     var factor = Math.pow(10, precision);
@@ -14,19 +55,24 @@ function round (number, precision) {
 }
 
 // set up graph
-var margin = { top: 30, right: 30, bottom: 30, left: 30 },
+let margin = { top: 30, right: 30, bottom: 30, left: 30 },
 		width = 640 - margin.left - margin.right,
 		height = 640 - margin.top - margin.bottom;
 
-var svgSelection = d3.select('#graph').append('svg')
+let svgSelection = d3.select('#graph').append('svg')
 		.attr('width', width + margin.left + margin.right)
 		.attr('height', height + margin.top + margin.bottom)
 	.append('g')
 		.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').attr("id", "transform");
-var xScale = d3.scaleLinear().domain([0, 1]).range([0, width]);
-var yScale = d3.scaleLinear().domain([1, 0]).range([0, height]);
-var xAxis = d3.axisBottom(xScale);
-var yAxis = d3.axisLeft(yScale);
+let xScale = d3.scaleLinear().domain([0, 1]).range([0, width]);
+let yScale = d3.scaleLinear().domain([1, 0]).range([0, height]);
+let xAxis = d3.axisBottom(xScale);
+let yAxis = d3.axisLeft(yScale);
+
+// distance marker for the animation
+let distanceScale = d3.scaleLinear().domain([0, 1]).range([0, 1000]);
+d3.select('#distance').append('svg').append('g').call(d3.axisBottom(distanceScale));
+
 // calls the number of ticks and sets the ticks size to make grid
 svgSelection.append("g").call(d3.axisBottom(xScale).ticks(20).tickSize(-height).tickFormat(""))
 // translate gridlines to the bottom and add the class to make it look better
@@ -40,20 +86,20 @@ svgSelection.append("g").attr("class", "x axis").attr("transform", "translate(" 
 svgSelection.append("g").call(yAxis).attr("transform", "translate(" + xScale(0) + ", " + 0 + ")");
 
 // line function
-var line = d3.line().x(function(d){ return d.x; }).y(function(d){ return d.y; });
+let line = d3.line().x(function(d){ return d.x; }).y(function(d){ return d.y; });
 
 // transformed graph
 // speed is in units of c
-var tempspeed = 0.4;
+let tempspeed = 0.4;
 // angle of the graph itself
-var tempangle = Math.atan(tempspeed)*180/Math.PI;
-var tempanglerad = Math.atan(tempspeed);
+let tempangle = Math.atan(tempspeed)*180/Math.PI;
+let tempanglerad = Math.atan(tempspeed);
 // for the lorentz transformation
-var tempgamma = 1/(Math.sqrt(1-Math.pow(tempspeed, 2))/1);
-var temptransformXScale = d3.scaleLinear().domain([0, 1/tempgamma]).range([0, Math.abs(width/Math.cos(tempanglerad))]);
-var temptransformXAxis = d3.axisBottom(temptransformXScale);
-var temptransformYScale = d3.scaleLinear().domain([0, 1/tempgamma]).range([Math.abs(height/Math.cos(tempanglerad)), 0]);
-var temptransformYAxis = d3.axisLeft(temptransformYScale);
+let tempgamma = 1/(Math.sqrt(1-Math.pow(tempspeed, 2))/1);
+let temptransformXScale = d3.scaleLinear().domain([0, 1/tempgamma]).range([0, Math.abs(width/Math.cos(tempanglerad))]);
+let temptransformXAxis = d3.axisBottom(temptransformXScale);
+let temptransformYScale = d3.scaleLinear().domain([0, 1/tempgamma]).range([Math.abs(height/Math.cos(tempanglerad)), 0]);
+let temptransformYAxis = d3.axisLeft(temptransformYScale);
 // gridlines
 svgSelection.append("g").call(d3.axisBottom(temptransformXScale).ticks(20).tickSize(-height-200).tickFormat(""))
 	.attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(tempangle)+","+(xScale(0))+","+"0"+")")
@@ -86,15 +132,13 @@ svgSelection.append("path").attr("d", line([
 		{x: width, y: 0}
 	])).attr("stroke", "yellow").attr("stroke-width", 1);
 
-d3.select("#transform").append("rect").attr("fill", "blue").attr("width", 8).attr("height", 8).attr("class", "trainpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
-
 // vue app
-var app = new Vue({
+let app = new Vue({
 	el: "#wrapper",
 	data: {
 		speed: 0.4,
 		animationspeed: 1,
-		scale: 'scaleX('+(1/this.gamma)+')',
+		// scale: 'scaleX('+(1/this.gamma)+')',
 		time: 0.00,
 		control: 'pause',
 	},
@@ -149,7 +193,15 @@ var app = new Vue({
 				}
 			}
 			this.time = round(this.time, 6);
-			d3.select(".trainpoint").attr("x", xScale(this.time)-4).attr("y", yScale(this.time * this.speed)-4);
+			d3.select(".trainpoint")
+				.attr("x", xScale(this.time) - 4)
+				.attr("y", yScale(this.time * this.speed) - 4);
+			d3.select(".trainpoint2")
+				.attr("x", xScale(this.time) - 4)
+				.attr("y", yScale(this.time * this.speed + trainlength/this.gamma) - 4);
+			d3.select(".newpoint")
+				.attr("x", xScale(this.convertTime()[0]) - 4)
+				.attr("y", yScale(this.convertTime()[1]) - 4);
 		},
 		animate: function(thing){
 			// animation frame is native and it allows for the animation to stop when focus is on another area
@@ -162,6 +214,17 @@ var app = new Vue({
 			return animation(thing);
 		},
 		updatePoints: function(){
+		},
+		convertTime: function(){
+			// angle has to be in radians!!!
+			// let newtime = (this.time - (this.speed*this.speed*this.time)) * this.gamma;
+			let timeoffset = 0.15 * Math.sin(this.anglerad);
+			timeoffset = timeoffset/(Math.sin((Math.PI/4) - this.anglerad));
+			let newtime = this.time - timeoffset;
+			newtime *= this.gamma;
+			let mapx = Math.cos(this.anglerad) * newtime;
+			let mapy = Math.sin(this.anglerad) * newtime;
+			return [mapx, mapy];
 		}
 	},
 	computed: {
@@ -181,15 +244,19 @@ var app = new Vue({
 				{x: (trainlength+distance)/this.speed, y: trainlength+distance+(trainlength/this.gamma)}
 			];
 		},
+		doorEndTime: function(){
+
+		}
 
 	},
 	mounted: function(){
+		// train box
 		d3.select("#transform").append("path").attr("d", line([
 				{x: xScale(0), y: yScale(0)},
 				{x: xScale(0), y: yScale(trainlength/this.gamma)},
 				{x: xScale(1), y: yScale(this.speed+trainlength/this.gamma)},
 				{x: xScale(1), y: yScale(this.speed)}
-			])).attr("fill", "teal").attr("opacity", "0.3").attr("class", "train");
+			])).attr("fill", "orangered").attr("opacity", "0.3").attr("class", "train");
 		d3.select("#transform").append("path").attr("d", line([
 				{x: xScale(0), y: yScale(distance+trainlength)},
 				{x: xScale(0), y: yScale(distance+trainlength+mountainlength)},
@@ -201,6 +268,10 @@ var app = new Vue({
 			]));
 		// points for the minkowski diagram
 		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "point");
+		d3.select("#transform").append("rect").attr("fill", "#f15a24").attr("width", 8).attr("height", 8).attr("class", "trainpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
+		d3.select("#transform").append("rect").attr("fill", "#f15a24").attr("width", 8).attr("height", 8).attr("class", "trainpoint2").attr("x", xScale(0)-4).attr("y", yScale(trainlength/this.gamma)-4);
+		d3.select("#transform").append("rect").attr("fill", "red").attr("width", 8).attr("height", 8).attr("class", "newpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
+		doorBClose();
 	},
 	watch: {
 		speed: function(){
