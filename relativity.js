@@ -224,10 +224,10 @@ let app = new Vue({
 			if (this.time >= this.door[0].x - 0.01 && this.time < this.door[0].x){
 				doorAClose();
 			}
-			if (this.time * this.gamma >= this.door[1].x / this.gamma - 0.01 && this.time * this.gamma < this.door[1].x / this.gamma){
-				doorBOpen2();
+			if (this.time >= this.door[1].x - this.timeoffset - 0.01 && this.time < this.door[1].x - this.timeoffset){
+				doorAClose2();
 			}
-			if (this.time * this.gamma >= this.door[0].x / this.gamma - 0.01 && this.time * this.gamma < this.door[0].x / this.gamma){
+			if (this.time >= this.door[0].x - this.timeoffset - 0.01 && this.time < this.door[0].x - this.timeoffset){
 				doorAClose2();
 			}
 			this.time = round(this.time, 6);
@@ -235,6 +235,11 @@ let app = new Vue({
 				.attr("d", line([
 					{x: xScale(this.time), y: yScale(this.time * this.speed + trainlength/this.gamma)},
 					{x: xScale(this.convertTime()[0]), y: yScale(this.convertTime()[1])},
+				]));
+			d3.select(".timeconnect2")
+				.attr("d", line([
+					{x: xScale(this.door[1].x - this.timeoffset), y: yScale((this.door[1].x - this.timeoffset) * this.speed)},
+					{x: xScale(this.door[1].x), y: yScale(this.door[1].y)},
 				]));
 			d3.select(".trainpoint")
 				.attr("x", xScale(this.time) - 4)
@@ -289,8 +294,8 @@ let app = new Vue({
 				{x: (mountainlength+0.25-(trainlength/this.gamma))/this.speed, y: 0.25+mountainlength}
 			];
 		},
-		doorEndTime: function(){
-
+		timeoffset: function(){
+			return (this.speed * trainlength / this.gamma) / (1 - Math.pow(this.speed, 2))
 		}
 
 	},
@@ -311,11 +316,12 @@ let app = new Vue({
 		d3.select("#transform").append("path").attr("d", line([
 				{x: xScale(trainlength+distance)/this.speed, y: yScale(trainlength+distance)}
 			]));
+		// connect timepoints
+		d3.select("#transform").append("path").attr("stroke-width", 1).attr("stroke", "green").attr("stroke-dasharray", "5 10").attr("class", "timeconnect");
+		d3.select("#transform").append("path").attr("stroke-width", 1).attr("stroke", "green").attr("stroke-dasharray", "5 10").attr("class", "timeconnect2");
 		// points for the minkowski diagram
 		// the door points
 		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "point");
-		// connect timepoints
-		d3.select("#transform").append("path").attr("stroke-width", 1).attr("stroke", "green").attr("stroke-dasharray", "5 10").attr("class", "timeconnect");
 		// the points with the train
 		d3.select("#transform").append("rect").attr("fill", "#f15a24").attr("width", 8).attr("height", 8).attr("class", "trainpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
 		d3.select("#transform").append("rect").attr("fill", "#f15a24").attr("width", 8).attr("height", 8).attr("class", "trainpoint2").attr("x", xScale(0)-4).attr("y", yScale(trainlength/this.gamma)-4);
