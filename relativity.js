@@ -224,7 +224,7 @@ let app = new Vue({
 			if (this.time >= this.door[0].x - 0.01 && this.time < this.door[0].x){
 				doorAClose();
 			}
-			if (this.time / this.gamma >= this.door[1].x - 0.01 && this.time / this.gamma < this.door[1].x){
+			if (this.time >= this.door[1].x * this.gamma - 0.01 && this.time / this.gamma < this.door[1].x){
 				doorBOpen2();
 			}
 			this.time = round(this.time, 6);
