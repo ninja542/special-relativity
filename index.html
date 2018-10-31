@@ -18,7 +18,7 @@
 			<div id="everything">
 				<div>
 					<div id="lightspeed">
-						<p>Train frame of reference, time = {{time * gamma}} seconds</p>
+						<p>Train frame of reference, time = {{time / gamma}} seconds</p>
 						<div id="lighttrain">
 							<svg viewbox="0 0 332 75" height="35" preserveAspectRatio="none" width="150" xmlns="http://www.w3.org/2000/svg">
 								<g>
@@ -57,7 +57,7 @@
 								</g>
 							</svg>
 						</div>
-						<div id="mountain" v-bind:style="{left: 250 - (speed * time * 3e+8 / 3e+5)}">
+						<div id="mountain" v-bind:style="{left: 250 - (130 - 130/gamma) - (speed * time * 3e+8 / 3e+5)}">
 							<svg viewbox="0 0 515 348" height="202px" v-bind:width="130/gamma+'px'" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
 								<g>
 									<path class="mou-1" d="M352,100.81l7.76-13.58a5.38,5.38,0,0,1,9.39.08l13.1,23.82a5.38,5.38,0,0,0,9.19.39l10.76-16.15a5.38,5.38,0,0,1,6.26-2.09l10.39,3.64a5.38,5.38,0,0,0,7-3.87l3.27-14.15L398.89,8.2a12.69,12.69,0,0,0-22.86-1l-44.38,83L343.52,102A5.38,5.38,0,0,0,352,100.81Z"/>

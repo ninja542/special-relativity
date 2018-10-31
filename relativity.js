@@ -6,47 +6,66 @@ const trainlength = 0.15;
 const mountainlength = 0.13;
 const distance = 0.1;
 // animations done using anime library
-function doorAClose(){
-	anime({
-		targets: "#lightspeed #doorA",
-		translateY: {
-			value: 72,
-			duration: 1000,
-			easing: "linear",
-		}
-	});
-}
-function doorBClose(){
-	anime({
-		targets: "#lightspeed #doorB",
-		translateY: {
-			value: 72,
-			duration: 1000,
-			easing: "linear",
-		}
-	});
-}
 function doorAOpen(){
 	anime({
-		targets: "#lightspeed #doorA",
+		targets: "#observer #doorA, #lightspeed #doorA",
 		translateY: {
 			value: -72,
-			duration: 1000,
+			duration: 500,
+			easing: "linear",
+		}
+	});
+}
+function doorAClose(){
+	anime({
+		targets: "#observer #doorA",
+		translateY: {
+			value: 72,
+			duration: 500,
+			easing: "linear",
+		}
+	});
+}
+function doorAClose2(){
+	anime({
+		targets: "#lightspeed #doorA",
+		translateY: {
+			value: 72,
+			duration: 500,
 			easing: "linear",
 		}
 	});
 }
 function doorBOpen(){
 	anime({
-		targets: "#lightspeed #doorB",
+		targets: "#observer #doorB",
 		translateY: {
 			value: -72,
-			duration: 1000,
+			duration: 500,
 			easing: "linear",
 		}
 	});
 }
-
+function doorBOpen2(){
+	anime({
+		targets: "#lightspeed #doorB",
+		translateY: {
+			value: -72,
+			duration: 500,
+			easing: "linear",
+		}
+	});
+}
+function doorBClose(){
+	anime({
+		targets: "#lightspeed #doorB, #observer #doorB",
+		translateY: {
+			value: 72,
+			duration: 500,
+			easing: "linear",
+		}
+	});
+}
 function round (number, precision) {
     var factor = Math.pow(10, precision);
     var tempNumber = number * factor;
@@ -145,6 +164,7 @@ let app = new Vue({
 	methods: {
 		update: function(){
 			let scalevar = this.transformYScale();
+			// the special relativity grid
 			d3.select("#specialX").call(d3.axisBottom(this.transformXScale())).attr("transform", "translate(" + 0 + ", " + yScale(0) + ") rotate ("+(-this.angle)+",0,"+ "0"+")");
 			d3.select("#specialY").call(d3.axisLeft(this.transformYScale())).attr("transform", "translate(" + xScale(0) + ", " + (height-Math.abs(height/Math.cos(this.anglerad))) + ") rotate ("+this.angle+", 0,"+(scalevar(0))+")");
 			d3.select(".gridx1").call(d3.axisBottom(this.transformXScale()).ticks(20).tickSize(-height-200).tickFormat(""))
@@ -155,15 +175,17 @@ let app = new Vue({
 				.attr("transform", "translate(" + xScale(0) + ", " + (height-Math.abs(height/Math.cos(this.anglerad))) + ") rotate ("+(-this.angle)+", 0,"+scalevar(0)+")");
 			d3.select(".gridy2").call(d3.axisLeft(this.transformYScale()).ticks(20).tickSize(width).tickFormat(""))
 				.attr("transform", "translate(" + xScale(0) + ", " + (height-Math.abs(height/Math.cos(this.anglerad))) + ") rotate ("+(-this.angle)+", 0,"+scalevar(0)+")");
+			// the box representing the train path
 			d3.select(".train").attr("d", line([
 				{x: xScale(0), y: yScale(0)},
 				{x: xScale(0), y: yScale(trainlength/this.gamma)},
 				{x: xScale(1), y: yScale(this.speed+trainlength/this.gamma)},
 				{x: xScale(1), y: yScale(this.speed)}
 			]));
+			// the points where the doors are supposed to open
 			var data =  d3.select("#transform").selectAll("circle").data(this.door);
 			data.attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
-			data.enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
+			data.enter().append("circle").attr("fill", "green").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);});
 			data.exit().remove();
 		},
 		transformXScale: function(){
@@ -180,6 +202,8 @@ let app = new Vue({
 		advanceTime: function(){
 			if (this.time >= 1){
 				this.time = 0;
+				doorBClose();
+				doorAOpen();
 			}
 			else{
 				if(this.control == "play"){
@@ -190,7 +214,18 @@ let app = new Vue({
 				}
 				else if(this.control == "restart"){
 					this.time = 0;
+					doorBClose();
+					doorAOpen();
 				}
+			}
+			if (this.time >= this.door[1].x - 0.01 && this.time < this.door[1].x){
+				doorBOpen();
+			}
+			if (this.time >= this.door[0].x - 0.01 && this.time < this.door[0].x){
+				doorAClose();
+			}
+			if (this.time / this.gamma >= this.door[1].x - 0.01 && this.time / this.gamma < this.door[1].x){
+				doorBOpen2();
 			}
 			this.time = round(this.time, 6);
 			d3.select(".trainpoint")
@@ -202,6 +237,11 @@ let app = new Vue({
 			d3.select(".newpoint")
 				.attr("x", xScale(this.convertTime()[0]) - 4)
 				.attr("y", yScale(this.convertTime()[1]) - 4);
+			d3.select(".timeconnect")
+				.attr("d", line([
+					{x: xScale(this.time), y: yScale(this.time * this.speed + trainlength/this.gamma)},
+					{x: xScale(this.convertTime()[0]), y: yScale(this.convertTime()[1])},
+				]));
 		},
 		animate: function(thing){
 			// animation frame is native and it allows for the animation to stop when focus is on another area
@@ -218,13 +258,15 @@ let app = new Vue({
 		convertTime: function(){
 			// angle has to be in radians!!!
 			// let newtime = (this.time - (this.speed*this.speed*this.time)) * this.gamma;
-			let timeoffset = 0.15 * Math.sin(this.anglerad);
-			timeoffset = timeoffset/(Math.sin((Math.PI/4) - this.anglerad));
+			// let timeoffset = 0.15 * Math.sin(this.anglerad);
+			// timeoffset = timeoffset/(Math.sin((Math.PI/4) - this.anglerad));
+			let timeoffset = (this.speed * trainlength / this.gamma) / (1 - Math.pow(this.speed, 2));
 			let newtime = this.time - timeoffset;
-			newtime *= this.gamma;
-			let mapx = Math.cos(this.anglerad) * newtime;
-			let mapy = Math.sin(this.anglerad) * newtime;
-			return [mapx, mapy];
+			// newtime *= this.gamma;
+			// let mapx = Math.cos(this.anglerad) * newtime;
+			// let mapy = Math.sin(this.anglerad) * newtime;
+			let mapy = newtime * this.speed;
+			return [newtime, mapy];
 		}
 	},
 	computed: {
@@ -241,7 +283,7 @@ let app = new Vue({
 			return [
 				// {x: ((distance+mountainlength+(trainlength - trainlength/this.gamma))/this.speed), y: trainlength+distance+mountainlength},
 				{x: (trainlength+distance)/this.speed, y: trainlength+distance},
-				{x: (trainlength+distance)/this.speed, y: trainlength+distance+(trainlength/this.gamma)}
+				{x: (mountainlength+0.25-(trainlength/this.gamma))/this.speed, y: 0.25+mountainlength}
 			];
 		},
 		doorEndTime: function(){
@@ -267,10 +309,14 @@ let app = new Vue({
 				{x: xScale(trainlength+distance)/this.speed, y: yScale(trainlength+distance)}
 			]));
 		// points for the minkowski diagram
+		// the door points
 		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "point");
+		// the points with the train
 		d3.select("#transform").append("rect").attr("fill", "#f15a24").attr("width", 8).attr("height", 8).attr("class", "trainpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
 		d3.select("#transform").append("rect").attr("fill", "#f15a24").attr("width", 8).attr("height", 8).attr("class", "trainpoint2").attr("x", xScale(0)-4).attr("y", yScale(trainlength/this.gamma)-4);
-		d3.select("#transform").append("rect").attr("fill", "red").attr("width", 8).attr("height", 8).attr("class", "newpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
+		// the time point that corresponds with the front of the train
+		d3.select("#transform").append("rect").attr("fill", "green").attr("width", 8).attr("height", 8).attr("class", "newpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
+		d3.select("#transform").append("path").attr("stroke-width", 1).attr("stroke", "green").attr("stroke-dasharray", "5 10").attr("class", "timeconnect");
 		doorBClose();
 	},
 	watch: {
