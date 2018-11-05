@@ -11,7 +11,7 @@ function doorAOpen(){
 		targets: "#observer #doorA, #lightspeed #doorA",
 		translateY: {
 			value: -72,
-			duration: 500,
+			duration: 100,
 			easing: "linear",
 		}
 	});
@@ -21,7 +21,7 @@ function doorAClose(){
 		targets: "#observer #doorA",
 		translateY: {
 			value: 72,
-			duration: 500,
+			duration: 100,
 			easing: "linear",
 		}
 	});
@@ -31,7 +31,7 @@ function doorAClose2(){
 		targets: "#lightspeed #doorA",
 		translateY: {
 			value: 72,
-			duration: 500,
+			duration: 100,
 			easing: "linear",
 		}
 	});
@@ -41,7 +41,7 @@ function doorBOpen(){
 		targets: "#observer #doorB",
 		translateY: {
 			value: -72,
-			duration: 500,
+			duration: 100,
 			easing: "linear",
 		}
 	});
@@ -51,7 +51,7 @@ function doorBOpen2(){
 		targets: "#lightspeed #doorB",
 		translateY: {
 			value: -72,
-			duration: 500,
+			duration: 100,
 			easing: "linear",
 		}
 	});
@@ -61,7 +61,7 @@ function doorBClose(){
 		targets: "#lightspeed #doorB, #observer #doorB",
 		translateY: {
 			value: 72,
-			duration: 500,
+			duration: 100,
 			easing: "linear",
 		}
 	});
@@ -295,7 +295,7 @@ let app = new Vue({
 			];
 		},
 		timeoffset: function(){
-			return (this.speed * trainlength / this.gamma) / (1 - Math.pow(this.speed, 2))
+			return (this.speed * trainlength / this.gamma) / (1 - Math.pow(this.speed, 2));
 		}
 
 	},
@@ -321,7 +321,7 @@ let app = new Vue({
 		d3.select("#transform").append("path").attr("stroke-width", 1).attr("stroke", "green").attr("stroke-dasharray", "5 10").attr("class", "timeconnect2");
 		// points for the minkowski diagram
 		// the door points
-		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "red").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "point");
+		d3.select("#transform").selectAll("circle").data(this.door).enter().append("circle").attr("fill", "darkblue").attr("r", 4).attr("cx", function(d){return xScale(d.x);}).attr("cy", function(d){ return yScale(d.y);}).attr("class", "point");
 		// the points with the train
 		d3.select("#transform").append("rect").attr("fill", "#f15a24").attr("width", 8).attr("height", 8).attr("class", "trainpoint").attr("x", xScale(0)-4).attr("y", yScale(0)-4);
 		d3.select("#transform").append("rect").attr("fill", "#f15a24").attr("width", 8).attr("height", 8).attr("class", "trainpoint2").attr("x", xScale(0)-4).attr("y", yScale(trainlength/this.gamma)-4);
